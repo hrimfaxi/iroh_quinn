@@ -254,7 +254,7 @@ impl PathData {
         let congestion = config
             .congestion_controller_factory
             .clone()
-            .build(now, config.get_initial_mtu());
+            .build(now, config.get_initial_mtu(), &network_path.remote);
         Self {
             network_path,
             rtt: RttEstimator::new(config.initial_rtt),

@@ -98,12 +98,6 @@ pub trait Controller: Send + Sync + std::fmt::Debug {
     /// Initial congestion window
     fn initial_window(&self) -> u64;
 
-    /// Set coustom parameter for congestion controller
-    #[allow(unused_variables)]
-    fn set_parameter(&mut self, param: CongestionParameter) -> Result<(), ConfigError> {
-        Ok(())
-    }
-
     /// Returns Self for use in down-casting to extract implementation details
     fn into_any(self: Box<Self>) -> Box<dyn Any>;
 }
@@ -123,7 +117,7 @@ pub struct ControllerMetrics {
 /// Constructs controllers on demand
 pub trait ControllerFactory {
     /// Construct a fresh `Controller`
-    fn build(self: Arc<Self>, now: Instant, current_mtu: u16) -> Box<dyn Controller>;
+    fn build(self: Arc<Self>, now: Instant, current_mtu: u16, remote: &std::net::SocketAddr) -> Box<dyn Controller>;
 }
 
 const BASE_DATAGRAM_SIZE: u64 = 1200;

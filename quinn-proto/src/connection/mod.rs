@@ -6066,11 +6066,6 @@ impl Connection {
         self.path_data_mut(PathId::ZERO)
             .mtud
             .on_peer_max_udp_payload_size_received(peer_max_udp_payload_size);
-        if let Some(brutal_bandwidth_hint) = params.brutal_bandwidth_hint.map(|x| x.into_inner()) {
-            self.path_data_mut(PathId::ZERO)
-                .congestion
-                .set_parameter(PeerBandwidthHint(brutal_bandwidth_hint));
-        }
     }
 
     /// Decrypts a packet, returning the packet number on success

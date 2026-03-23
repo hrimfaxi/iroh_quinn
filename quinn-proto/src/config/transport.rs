@@ -83,8 +83,6 @@ pub struct TransportConfig {
 
     pub(crate) max_remote_nat_traversal_addresses: Option<NonZeroU8>,
 
-    pub(crate) brutal_bandwidth_hint: Option<u64>,
-
     #[cfg(feature = "qlog")]
     pub(crate) qlog_factory: Option<Arc<dyn QlogFactory>>,
 }
@@ -532,14 +530,6 @@ impl TransportConfig {
 
         sink
     }
-
-    /// Sets the local receive bandwidth capacity advertised to the peer, in bits per second.
-    ///
-    /// Used by the peer to configure its Brutal congestion controller sending rate.
-    pub fn brutal_bandwidth_hint(&mut self, value: u64) -> &mut Self {
-        self.brutal_bandwidth_hint = Some(value);
-        self
-    }
 }
 
 impl Default for TransportConfig {
@@ -594,8 +584,6 @@ impl Default for TransportConfig {
 
             #[cfg(feature = "qlog")]
             qlog_factory: None,
-
-            brutal_bandwidth_hint: None,
         }
     }
 }
@@ -635,7 +623,6 @@ impl fmt::Debug for TransportConfig {
             max_remote_nat_traversal_addresses,
             #[cfg(feature = "qlog")]
             qlog_factory,
-            brutal_bandwidth_hint,
         } = self;
         let mut s = fmt.debug_struct("TransportConfig");
 
@@ -665,7 +652,6 @@ impl fmt::Debug for TransportConfig {
             .field("datagram_send_buffer_size", datagram_send_buffer_size)
             // congestion_controller_factory not debug
             .field("enable_segmentation_offload", enable_segmentation_offload)
-            .field("brutal_bandwidth_hint", brutal_bandwidth_hint)
             .field("address_discovery_role", address_discovery_role)
             .field(
                 "max_concurrent_multipath_paths",
